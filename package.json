@@ -1,0 +1,28 @@
+{
+  "name": "express_playground",
+  "version": "1.0.0",
+  "description": "Phantola's ExpressJS Playground",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Phantola/Express_Playground.git"
+  },
+  "author": "Phantola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Phantola/Express_Playground/issues"
+  },
+  "homepage": "https://github.com/Phantola/Express_Playground#readme",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "prettier": "^3.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
