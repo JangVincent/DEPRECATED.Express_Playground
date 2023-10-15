@@ -1,49 +1,78 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const Person = require("./schemas/person.schema");
+
+require("dotenv").config();
+
+mongoose.set("strictQuery", false)
+
 const app = express();
-
-const port = 3000;
-
-let posts = [];
-
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.json(posts);
+  res.send({
+    message: "Hello World",
+  });
+})
+
+app.get("/persons", async (req, res) => {
+  const persons = await Person.find({}) 
+
+  res.send(persons)
 });
 
-app.post("/posts", (req, res) => {
-  const { title, name, text } = req.body;
+app.get("/persons/:email", async (req, res) => {
+  const person = await Person.findOne({
+    email : req.params.email
+  });
 
-  posts.push({
-    id: posts.length + 1,
-    title,
+  res.send(person)
+})
+
+app.post("/persons", async (req, res) => {
+  const { name, age, email } = req.body;
+
+  const person = await Person.create({
     name,
-    text,
-    createdAt: new Date(),
+    age,
+    email
   });
 
-  res.json(posts[posts.length - 1]);
+  await person.save()
+
+  res.send(person)
 });
 
-app.delete("/posts/:id", (req, res) => {
-  const id = req.params.id;
+app.put("/persons/:email", async (req, res) => {
+  const { name, age } = req.body;
 
-  const filteredPosts = posts.filter((post) => {
-    return post.id !== +id;
-  });
-  console.log(id)
+  console.log(req.params.email)
 
-  console.log(filteredPosts)
-  if (filteredPosts.length !== posts.length) {
-    posts = filteredPosts;
-    res.json("OK");
-    return;
-  }
+  const person = await Person.updateOne({email : req.params.email}, {$set : {name : name, age : age}});
 
-  res.json("NOT CHANGED");
+  console.log(person)
+
+  res.send({
+    message : "Updated"
+  })
+})
+
+app.delete("/persons/:email", async (req, res) => {
+  const email = req.params.email;
+
+  await Person.findOneAndDelete({email : email}); 
+  res.send({
+    message : "Deleted"
+  })
 });
 
-app.listen(port, () => {
-  console.log("Start Express server : use " + port);
+app.listen(process.env.PORT, async () => {
+  const mongodbUri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+  mongoose.connect(mongodbUri,{ useNewUrlParser: true })
+  .then(console.log("Connected to MongoDB"));
+
+  console.log(`Start Express server : use ${process.env.PORT}`);
 });

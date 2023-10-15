@@ -18,8 +18,12 @@
   "homepage": "https://github.com/Phantola/Express_Playground#readme",
   "dependencies": {
     "axios": "^1.5.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
+    "mongodb": "^6.1.0",
+    "mongoose": "^7.6.2",
     "prettier": "^3.0.3"
   },
   "devDependencies": {
